@@ -25,6 +25,7 @@ export function HomeScreen(props) {
     props.add(expenseObj)
   }
 
+  
 
 
   return (
