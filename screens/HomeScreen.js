@@ -117,8 +117,8 @@ export function HomeScreen(props) {
             id={item.id}
             location={item.location}
             amount={item.amount}
-            itemType={item.itemType} 
-            handler={ ListClickHandler }
+            itemType={item.itemType}
+            handler={ListClickHandler}
           />)}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={ListItemSeparator}
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 10,
     borderRadius: 20,
-    marginRight:1,
+    marginRight: 1,
   },
   buttonText: {
     color: "black",
@@ -192,8 +192,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     flex: 1,
-    borderRadius:20,
-    marginLeft:1,
+    borderRadius: 20,
+    marginLeft: 1,
   },
   listItem: {
     borderWidth: 1,
