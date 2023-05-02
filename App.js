@@ -10,9 +10,13 @@ import { SignUpScreen } from './screens/SignUpScreen';
 import { SignInScreen } from './screens/SignInScreen';
 import { ExpenseDetail } from './screens/ExpenseDetail';
 
+//Context
+import { AuthContext } from './contexts/AuthContext';
+import { ExpenseContext } from './contexts/ExpenseContext';
+
 //Firebase
 import { firebaseConfig } from './config/Config';
-import { initializeApp } from 'firebase/app' 
+import { initializeApp } from 'firebase/app'
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -21,10 +25,10 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-import { 
+import {
   getFirestore,
   doc,
-  setDoc, 
+  setDoc,
   addDoc,
   collection,
   query,
@@ -47,7 +51,6 @@ export default function App() {
   onAuthStateChanged(FBAuth, (user) => {
     if (user) {
       setAuth(user)
-      //console.log( user.uid )
     }
     else {
       setAuth(null)
@@ -55,7 +58,7 @@ export default function App() {
   })
 
   useEffect(() => {
-    if(expenseData.length === 0 && auth ) {
+    if (expenseData.length === 0 && auth) {
       GetData()
     }
   })
@@ -74,24 +77,22 @@ export default function App() {
 
   const SignOut = () => {
     signOut(FBAuth).then(() => {
-
     }).catch((error) => console.log(error))
   }
 
   const AddData = async (expense) => {
     const userId = auth.uid
     const path = `users/${userId}/expenses`
-    //const data = {id: new Date().getTime(), descriptiopn: "sample data"}
     const ref = await addDoc(collection(FBdb, path), expense)
   }
 
   const GetData = () => {
     const userId = auth.uid
     const path = `users/${userId}/expenses`
-    const dataQuery = query(collection(FBdb, path ))
+    const dataQuery = query(collection(FBdb, path))
     const unsubscribe = onSnapshot(dataQuery, (responseData) => {
       let expenses = []
-      responseData.forEach((expense)=>{
+      responseData.forEach((expense) => {
         let item = expense.data()
         item.id = expense.id
         expenses.push(item)
@@ -102,28 +103,45 @@ export default function App() {
   }
 
   const SignOutButton = (props) => {
-    return(
-      <TouchableOpacity onPress={()=> SignOut()}>
+    return (
+      <TouchableOpacity onPress={() => SignOut()}>
         <Text>Logout</Text>
       </TouchableOpacity>
     )
   }
 
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name = "SignUp">
-          { (props) => <SignUpScreen {...props} handler = {SignUp} authStatus = {auth}/>}
+        <Stack.Screen name="SignUp">
+          {(props) =>
+            <AuthContext.Provider value={auth}>
+              <SignUpScreen {...props} handler={SignUp} />
+            </AuthContext.Provider>
+          }
         </Stack.Screen>
-        <Stack.Screen name = "SignIn" >
-        { (props) => <SignInScreen {...props} handler = {SignIn} authStatus = {auth}/>}
+        <Stack.Screen name="SignIn" >
+          {(props) =>
+            <AuthContext.Provider value={auth}>
+              <SignInScreen {...props} handler={SignIn} />
+            </AuthContext.Provider>
+          }
         </Stack.Screen>
-        <Stack.Screen name = "Home" options = {{headerRight:() => <SignOutButton/>}}>
-        { (props) => <HomeScreen {...props} authStatus = {auth} add ={AddData} data ={expenseData}/>}
+        <Stack.Screen name="Home" options={{ headerRight: () => <SignOutButton /> }}>
+          {(props) =>
+            <AuthContext.Provider value={auth}>
+              <ExpenseContext.Provider value={expenseData}>
+                <HomeScreen {...props} add={AddData}/>
+              </ExpenseContext.Provider>
+            </AuthContext.Provider>
+          }
         </Stack.Screen>
         <Stack.Screen name='Expense Detail'>
-          {(props ) => <ExpenseDetail {...props}/> }
+          {(props) =>
+            <AuthContext.Provider value={auth}>
+              <ExpenseDetail {...props} />
+            </AuthContext.Provider>
+          }
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

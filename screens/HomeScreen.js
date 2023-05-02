@@ -1,10 +1,14 @@
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { AuthContext } from '../contexts/AuthContext'
+import { ExpenseContext } from '../contexts/ExpenseContext'
 
 export function HomeScreen(props) {
 
   const navigation = useNavigation()
+  const authStatus = useContext(AuthContext)
+  const Expenses = useContext(ExpenseContext)
 
   const [showModal, setShowModal] = useState(false)
   const [date, setDate] = useState('')
@@ -13,11 +17,11 @@ export function HomeScreen(props) {
   const [amount, setAmount] = useState('')
 
   useEffect(() => {
-    if (!props.authStatus) {
+    if (!authStatus) {
       //navigation.navigate("SignIn")
       navigation.reset({ index: 0, routes: [{ name: "SignIn" }] })
     }
-  }, [props.authStatus])
+  }, [authStatus])
 
   const saveExpense = () => {
     setShowModal(false)
@@ -125,7 +129,7 @@ export function HomeScreen(props) {
       </TouchableOpacity>
 
       <FlatList
-        data={props.data}
+        data={Expenses}
         renderItem={({ item }) => (<ListItem date={item.date} id={item.id} location={item.location} amount={item.amount} itemType={item.itemType} />)}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={ListItemSeparator}
