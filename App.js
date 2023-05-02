@@ -9,6 +9,7 @@ import { HomeScreen } from './screens/HomeScreen';
 import { SignUpScreen } from './screens/SignUpScreen';
 import { SignInScreen } from './screens/SignInScreen';
 import { ExpenseDetail } from './screens/ExpenseDetail';
+import { TabScreen } from './screens/TabScree';
 
 //Context
 import { AuthContext } from './contexts/AuthContext';
@@ -127,11 +128,11 @@ export default function App() {
             </AuthContext.Provider>
           }
         </Stack.Screen>
-        <Stack.Screen name="Home" options={{ headerRight: () => <SignOutButton /> }}>
+        <Stack.Screen name="Home" options={{ headerShown: false }}>
           {(props) =>
             <AuthContext.Provider value={auth}>
               <ExpenseContext.Provider value={expenseData}>
-                <HomeScreen {...props} add={AddData}/>
+                <TabScreen {...props} />
               </ExpenseContext.Provider>
             </AuthContext.Provider>
           }
