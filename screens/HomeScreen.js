@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useState, useEffect } from 'react'
 
@@ -25,7 +25,26 @@ export function HomeScreen(props) {
     props.add(expenseObj)
   }
 
-  
+  const ListItem = (props) => {
+    return(
+      <View style={styles.listItem}>
+        <Text>
+          {props.date}, {'\n'}
+          {props.id}, {'\n'}
+          {props.amount}, {'\n'}
+          {props.location}, {'\n'}
+          {props.itemType}
+        </Text>
+      </View>
+    )
+  }  
+
+  const ListItemSeparator = (props) => {
+    return (
+      <View style={styles.separator}></View>
+    )
+  }
+
 
 
   return (
@@ -93,6 +112,13 @@ export function HomeScreen(props) {
       >
         <Text style={styles.buttonText} >Add Expense</Text>
       </TouchableOpacity>
+
+      <FlatList
+        data = {props.data}
+        renderItem={({item}) => (<ListItem date = {item.date} id = {item.id} location = {item.location} amount = {item.amount} itemType = {item.itemType}/>)}
+        keyExtractor={item => item.id}
+        ItemSeparatorComponent={ListItemSeparator}
+      />
     </View>
   )
 }
@@ -162,5 +188,18 @@ const styles = StyleSheet.create({
     flex: 1,
 
   },
+  listItem:{ 
+    borderWidth: 1,
+    backgroundColor: '#CCCCCC',
+    borderRadius: 5,
+    marginTop: 5,
+    marginRight: 10,
+    marginLeft: 10,
+    marginBottom:5,
+  },
+  separator: {
+    backgroundColor: 'black',
+    height: 1,
+  }
 
 })
