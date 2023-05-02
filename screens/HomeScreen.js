@@ -21,23 +21,34 @@ export function HomeScreen(props) {
 
   const saveExpense = () => {
     setShowModal(false)
-    const expenseObj = {date: date, location: location, itemType: itemType, amount: amount}
+    const expenseObj = { date: date, location: location, itemType: itemType, amount: amount }
     props.add(expenseObj)
   }
 
+  const ListClickHandler = (data) => {
+    navigation.navigate("Expense Detail", data)
+  }
+
   const ListItem = (props) => {
-    return(
-      <View style={styles.listItem}>
-        <Text>
-          {props.date}, {'\n'}
-          {props.id}, {'\n'}
-          {props.amount}, {'\n'}
-          {props.location}, {'\n'}
-          {props.itemType}
-        </Text>
+    return (
+      <View
+        style={styles.listItem}
+      >
+        <TouchableOpacity
+          onPress={() =>
+            ListClickHandler({ id: props.id, date: props.date, location: props.location, itemType: props.itemType, amount: props.amount })}
+        >
+          <Text>
+            {props.date}, {'\n'}
+            {props.id}, {'\n'}
+            {props.amount}, {'\n'}
+            {props.location}, {'\n'}
+            {props.itemType}
+          </Text>
+        </TouchableOpacity>
       </View>
     )
-  }  
+  }
 
   const ListItemSeparator = (props) => {
     return (
@@ -114,8 +125,8 @@ export function HomeScreen(props) {
       </TouchableOpacity>
 
       <FlatList
-        data = {props.data}
-        renderItem={({item}) => (<ListItem date = {item.date} id = {item.id} location = {item.location} amount = {item.amount} itemType = {item.itemType}/>)}
+        data={props.data}
+        renderItem={({ item }) => (<ListItem date={item.date} id={item.id} location={item.location} amount={item.amount} itemType={item.itemType} />)}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={ListItemSeparator}
       />
@@ -188,14 +199,14 @@ const styles = StyleSheet.create({
     flex: 1,
 
   },
-  listItem:{ 
+  listItem: {
     borderWidth: 1,
     backgroundColor: '#CCCCCC',
     borderRadius: 5,
     marginTop: 5,
     marginRight: 10,
     marginLeft: 10,
-    marginBottom:5,
+    marginBottom: 5,
   },
   separator: {
     backgroundColor: 'black',

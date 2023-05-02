@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { HomeScreen } from './screens/HomeScreen';
 import { SignUpScreen } from './screens/SignUpScreen';
 import { SignInScreen } from './screens/SignInScreen';
+import { ExpenseDetail } from './screens/ExpenseDetail';
 
 //Firebase
 import { firebaseConfig } from './config/Config';
@@ -120,6 +121,9 @@ export default function App() {
         </Stack.Screen>
         <Stack.Screen name = "Home" options = {{headerRight:() => <SignOutButton/>}}>
         { (props) => <HomeScreen {...props} authStatus = {auth} add ={AddData} data ={expenseData}/>}
+        </Stack.Screen>
+        <Stack.Screen name='Expense Detail'>
+          {(props ) => <ExpenseDetail {...props}/> }
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
