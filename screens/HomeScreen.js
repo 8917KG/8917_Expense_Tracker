@@ -160,11 +160,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   modal: {
-    padding: 10,
     flex: 1,
     justifyContent: "start",
     margin: 10,
-    backgroundColor: "#1D84B1",
+    backgroundColor: "#ADD8E6",
+    marginTop: 20,
   },
   buttonStyle: {
     flexDirection: "row",
@@ -174,6 +174,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#28DB3E",
     flex: 1,
     marginVertical: 10,
+    borderRadius: 20,
+    marginRight:1,
   },
   buttonText: {
     color: "black",
@@ -190,7 +192,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     flex: 1,
-
+    borderRadius:20,
+    marginLeft:1,
   },
   listItem: {
     borderWidth: 1,
