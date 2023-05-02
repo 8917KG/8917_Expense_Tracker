@@ -5,6 +5,8 @@ import { AuthContext } from '../contexts/AuthContext'
 import { ExpenseContext } from '../contexts/ExpenseContext'
 import { DBContext } from '../contexts/DBContext'
 import { addDoc, collection } from 'firebase/firestore'
+import { ListItem } from '../components/ListItem'
+import { ListItemSeparator } from '../components/ListItemSeparator'
 
 export function HomeScreen(props) {
 
@@ -21,14 +23,13 @@ export function HomeScreen(props) {
 
   useEffect(() => {
     if (!authStatus) {
-      //navigation.navigate("SignIn")
       navigation.reset({ index: 0, routes: [{ name: "SignIn" }] })
     }
   }, [authStatus])
 
   const saveExpense = async () => {
     setShowModal(false)
-    const expenseObj = { date: date, location: location, itemType: itemType, amount: amount}
+    const expenseObj = { date: date, location: location, itemType: itemType, amount: amount }
     //add note to firebase
     const path = `users/${authStatus.uid}/expenses`
     const ref = await addDoc(collection(DB, path), expenseObj)
@@ -41,35 +42,6 @@ export function HomeScreen(props) {
   const ListClickHandler = (data) => {
     navigation.navigate("Expense Detail", data)
   }
-
-  const ListItem = (props) => {
-    return (
-      <View
-        style={styles.listItem}
-      >
-        <TouchableOpacity
-          onPress={() =>
-            ListClickHandler({ id: props.id, date: props.date, location: props.location, itemType: props.itemType, amount: props.amount })}
-        >
-          <Text>
-            {props.date}, {'\n'}
-            {props.id}, {'\n'}
-            {props.amount}, {'\n'}
-            {props.location}, {'\n'}
-            {props.itemType}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-
-  const ListItemSeparator = (props) => {
-    return (
-      <View style={styles.separator}></View>
-    )
-  }
-
-
 
   return (
     <View>
@@ -139,7 +111,15 @@ export function HomeScreen(props) {
 
       <FlatList
         data={Expenses}
-        renderItem={({ item }) => (<ListItem date={item.date} id={item.id} location={item.location} amount={item.amount} itemType={item.itemType} />)}
+        renderItem={({ item }) => (
+          <ListItem
+            date={item.date}
+            id={item.id}
+            location={item.location}
+            amount={item.amount}
+            itemType={item.itemType} 
+            handler={ ListClickHandler }
+          />)}
         keyExtractor={item => item.id}
         ItemSeparatorComponent={ListItemSeparator}
       />
@@ -221,9 +201,5 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 5,
   },
-  separator: {
-    backgroundColor: 'black',
-    height: 1,
-  }
 
 })
