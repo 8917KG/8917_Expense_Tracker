@@ -16,6 +16,7 @@ const authStatus = useContext(AuthContext)
    <Text>{location}</Text>
    <Text>{itemType}</Text>
    <Text>{amount}</Text>
+   <Text>{id}</Text>
   </View>
  )
 }

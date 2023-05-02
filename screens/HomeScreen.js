@@ -3,12 +3,15 @@ import { useNavigation } from '@react-navigation/native'
 import { useState, useEffect, useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { ExpenseContext } from '../contexts/ExpenseContext'
+import { DBContext } from '../contexts/DBContext'
+import { addDoc, collection } from 'firebase/firestore'
 
 export function HomeScreen(props) {
 
   const navigation = useNavigation()
   const authStatus = useContext(AuthContext)
   const Expenses = useContext(ExpenseContext)
+  const DB = useContext(DBContext)
 
   const [showModal, setShowModal] = useState(false)
   const [date, setDate] = useState('')
@@ -23,10 +26,16 @@ export function HomeScreen(props) {
     }
   }, [authStatus])
 
-  const saveExpense = () => {
+  const saveExpense = async () => {
     setShowModal(false)
-    const expenseObj = { date: date, location: location, itemType: itemType, amount: amount }
-    props.add(expenseObj)
+    const expenseObj = { date: date, location: location, itemType: itemType, amount: amount}
+    //add note to firebase
+    const path = `users/${authStatus.uid}/expenses`
+    const ref = await addDoc(collection(DB, path), expenseObj)
+    setDate('')
+    setLocation('')
+    setItemType('')
+    setAmount('')
   }
 
   const ListClickHandler = (data) => {

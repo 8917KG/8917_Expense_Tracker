@@ -15,6 +15,7 @@ import { TabScreen } from './screens/TabScree';
 import { AuthContext } from './contexts/AuthContext';
 import { ExpenseContext } from './contexts/ExpenseContext';
 import { FBAuthContext } from './contexts/FBAuthContext';
+import { DBContext } from './contexts/DBContext';
 
 //Firebase
 import { firebaseConfig } from './config/Config';
@@ -77,17 +78,6 @@ export default function App() {
       .catch((error) => console.log(error))
   }
 
-  const SignOut = () => {
-    signOut(FBAuth).then(() => {
-    }).catch((error) => console.log(error))
-  }
-
-  const AddData = async (expense) => {
-    const userId = auth.uid
-    const path = `users/${userId}/expenses`
-    const ref = await addDoc(collection(FBdb, path), expense)
-  }
-
   const GetData = () => {
     const userId = auth.uid
     const path = `users/${userId}/expenses`
@@ -124,11 +114,13 @@ export default function App() {
         <Stack.Screen name="Home" options={{ headerShown: false }}>
           {(props) =>
             <FBAuthContext.Provider value={FBAuth}>
-              <AuthContext.Provider value={auth}>
-                <ExpenseContext.Provider value={expenseData}>
-                  <TabScreen {...props} />
-                </ExpenseContext.Provider>
-              </AuthContext.Provider>
+              <DBContext.Provider value={FBdb}>
+                <AuthContext.Provider value={auth}>
+                  <ExpenseContext.Provider value={expenseData}>
+                    <TabScreen {...props} />
+                  </ExpenseContext.Provider>
+                </AuthContext.Provider>
+              </DBContext.Provider>
             </FBAuthContext.Provider>
           }
         </Stack.Screen>
