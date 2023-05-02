@@ -14,6 +14,7 @@ import { TabScreen } from './screens/TabScree';
 //Context
 import { AuthContext } from './contexts/AuthContext';
 import { ExpenseContext } from './contexts/ExpenseContext';
+import { FBAuthContext } from './contexts/FBAuthContext';
 
 //Firebase
 import { firebaseConfig } from './config/Config';
@@ -103,14 +104,6 @@ export default function App() {
     })
   }
 
-  const SignOutButton = (props) => {
-    return (
-      <TouchableOpacity onPress={() => SignOut()}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
-    )
-  }
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -130,11 +123,13 @@ export default function App() {
         </Stack.Screen>
         <Stack.Screen name="Home" options={{ headerShown: false }}>
           {(props) =>
-            <AuthContext.Provider value={auth}>
-              <ExpenseContext.Provider value={expenseData}>
-                <TabScreen {...props} />
-              </ExpenseContext.Provider>
-            </AuthContext.Provider>
+            <FBAuthContext.Provider value={FBAuth}>
+              <AuthContext.Provider value={auth}>
+                <ExpenseContext.Provider value={expenseData}>
+                  <TabScreen {...props} />
+                </ExpenseContext.Provider>
+              </AuthContext.Provider>
+            </FBAuthContext.Provider>
           }
         </Stack.Screen>
         <Stack.Screen name='Expense Detail'>
